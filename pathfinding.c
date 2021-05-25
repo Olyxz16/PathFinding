@@ -70,6 +70,15 @@ vec2l vdisp(vec2l arr) {
     return arr;
 }
 
+bool vcontains(vec2l arr, vec2 val) {
+    while(arr!=NULL) {
+        if(veq(arr->val, val))
+            return true;
+        arr=arr->next;
+    }
+    return false;
+}
+
 
 vec2l nth(vec2l arr, int n) {
     while(n>0&&arr!=NULL) {
@@ -89,6 +98,7 @@ vec2l remf(vec2l arr, int length) {
     free(arr);
     return first;
 }
+
 
 
 
@@ -112,12 +122,12 @@ vec2* sortBy(vec2* vec_arr, float* d_arr, int size) {
     return vec_arr;
 }
 
-vec2l compute(int** board, vec2 pos, vec2 prev, vec2 target, int brds) {            // brds: taille du tableau 
-    printf("%d %d\n",pos->x,pos->y);
-    if(veq(pos, target)) {
-        vec2l res = addF(NULL,pos);
-        return res;
-    }
+vec2l compute(int** board, vec2 pos, vec2 prev, vec2 target, vec2l visited, int brds) {            // brds: taille du tableau 
+    //printf("%d %d\n",pos->x,pos->y);
+    if(vcontains(visited, pos))
+        return NULL;
+    if(veq(pos, target))
+        return addF(NULL,pos);
     if(veq(pos, verr()))
         return NULL;
 
@@ -128,10 +138,8 @@ vec2l compute(int** board, vec2 pos, vec2 prev, vec2 target, int brds) {        
     udrl[3]=pos->y<brds-1&&board[pos->x][pos->y+1]!=-1?vec2i(pos->x, pos->y+1):vec2i(-1,-1);
 
     float* udrld = malloc(sizeof(float)*4);             // les distances des vecteurs au target
-    udrld[0]=udrl[0]->x!=-1?dist(udrl[0]->x, udrl[0]->y, target->x, target->y):-1;
-    udrld[1]=udrl[1]->x!=-1?dist(udrl[1]->x, udrl[1]->y, target->x, target->y):-1;
-    udrld[2]=udrl[2]->x!=-1?dist(udrl[2]->x, udrl[2]->y, target->x, target->y):-1;
-    udrld[3]=udrl[3]->x!=-1?dist(udrl[3]->x, udrl[3]->y, target->x, target->y):-1;
+    for(int i = 0 ; i < 4 ; i++)
+        udrld[i]=udrl[i]->x!=-1?dist(udrl[i]->x, udrl[i]->y, target->x, target->y):-1;
 
     udrl = sortBy(udrl, udrld, 4);
 
@@ -139,7 +147,7 @@ vec2l compute(int** board, vec2 pos, vec2 prev, vec2 target, int brds) {        
     for(int i = 0 ; i < 4 ; i++) {
         if(udrld[i]==-1||veq(udrl[i],prev))
             continue;
-        vec2l res = compute(board, udrl[i], pos, target, brds);
+        vec2l res = compute(board, udrl[i], pos, target, addF(visited, pos), brds);
         if(res!=NULL)
             return addF(res,pos);
     }
@@ -155,33 +163,16 @@ void main() {
     for(int i = 0 ; i < size ; i++)
         for(int j = 0 ; j < size ; j++)
             board[i][j] = 0;
-    
-    board[8][4] = -1;
-    board[7][4] = -1;
-    board[6][4] = -1;
-    board[5][4] = -1;
-    board[4][4] = -1;
-    board[3][4] = -1;
-    board[2][4] = -1;
-    board[1][4] = -1;
-    board[0][4] = -1;
-
-    board[8][7] = -1;
-    board[7][7] = -1;
-    board[6][7] = -1;
-    board[5][7] = -1;
-    board[4][7] = -1;
-    board[3][7] = -1;
-    board[2][7] = -1;
-    board[1][7] = -1;
-    board[9][7] = -1;
-    
-
+    for(int i = 0 ; i < 9 ; i++) {
+        board[i][4]=-1;
+        board[i+1][7]=-1;
+    }
 
     vec2 start_pos = vec2i(0,0);
     vec2 target = vec2i(9,9);
 
-    vec2l path = compute(board, start_pos, NULL, target, size);
+    vec2l path = compute(board, start_pos, NULL, target, NULL, size);
+
 
     while(path!=NULL) {
         board[path->val->x][path->val->y]=3;
