@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
+#include <windows.h>
 
 
 typedef struct vector2 {
@@ -41,6 +42,18 @@ void display_tab(int** tab, int size) {
     }
 }
 
+void slow_display(vec2l path, int** board, vec2 start, vec2 end, int size, int delta_t) {
+    while(path!=NULL) {
+        board[path->val->x][path->val->y]=3;
+        board[start->x][start->y]=1;
+        board[end->x][end->y]=2;
+        path = path->next;
+        Sleep(delta_t);
+        system("cls");
+        display_tab(board, size);
+    }
+}
+
 vec2 vec2i(int x, int y) {
     vec2 v = malloc(sizeof(struct vector2));
     v->x=x;
@@ -68,6 +81,15 @@ vec2l vdisp(vec2l arr) {
     }
     printf("\n");
     return arr;
+}
+
+int vlen(vec2l arr) {
+    int len = 0;
+    while(arr!=NULL) {
+        arr=arr->next;
+        len++;
+    }
+    return len;
 }
 
 bool vcontains(vec2l arr, vec2 val) {
@@ -170,18 +192,9 @@ void main() {
 
     vec2 start_pos = vec2i(0,0);
     vec2 target = vec2i(9,9);
-
     vec2l path = compute(board, start_pos, NULL, target, NULL, size);
 
-
-    while(path!=NULL) {
-        board[path->val->x][path->val->y]=3;
-        path = path->next;
-    }
-    board[start_pos->x][start_pos->y]=1;
-    board[target->x][target->y]=2;
-
-    display_tab(board, size);
+    slow_display(path, board, start_pos, target, size, 200);
 
 }
 
