@@ -21,21 +21,27 @@
 
 ### Présentation
 
-Ce projet est un essai d'implémentation naïve d'un algorithme de pathfinding A* en C. 
+Ce projet est une implémentation naïve d'un algorithme de pathfinding A* en C.
 
 
 <a name="fr_ut"/>
 
 ### Utilisation
 
-Pour lancer le projet, compiler le fichier pathfinding.c puis le lancer. 
-L'initialisation du parcours se situe dans la fonction main.
+Modification :
 
 * Pour modifier la taille du tableau, modifier la variable "size".
-* Pour placer une case vide aux coordonnées (x,y), définir à 0 la valeur de "board[x][y]".
-* Pour placer un obstacle aux coordonnées (x,y), définir à -1 la valeur de "board[x][y]".
+* Modifier le board aux coordonnées (x,y) en plaçant des cases VIDE ou des MUR.
 * Pour modifier la case de départ, changer la valeur de "start_pos".
 * Pour modifier la case d'arrivée, changer la valeur de "target".
+
+Compilation :
+
+```
+gcc pathfinding.c
+a.exe
+```
+
 
 
 <a name="fr_cp"/>
@@ -44,6 +50,7 @@ L'initialisation du parcours se situe dans la fonction main.
 
 * Affinage des compétences en C.
 * Découverte de nouvelles structures de données.
+* Apprentissage du fonctionnement des algorithmes de pathfinding.
 
 
 <a name="fr_rs"/>
@@ -61,21 +68,27 @@ Une implémentation d'un algorithme A* en C.
 
 ### Presentation
 
-This project is an naive implementation test of an A* pathding algorithm written in C.
+This project is a naive implementation of an A* pathding algorithm written in C.
 
 
 <a name="en_u"/>
 
 ### Use
 
-To launch the projet, compile "pathfinding.c" and launch it.
-The board is initialized in the function "main".
+Editing : 
 
 * To modify the size of the board, edit the variable "size".
-* To place an empty tile at coordinate (x,y), set the value of "board[x][y]" to 0.
-* To place an obstacle at coordinate (x,y), set the value of "board[x][y]" to -1.
+* Edit the board at coordinate (x,y) by placing VIDE or MUR tiles.
 * To edit the starting tile, edit the value of "start_pos".
 * To edit the target tile, edit the value of "target".
+
+Compilation : 
+
+```
+gcc pathfinding.c
+a.exe
+```
+
 
 
 <a name="en_sk"/>
@@ -84,6 +97,7 @@ The board is initialized in the function "main".
 
 * Sharpening my C skills.
 * Discovering new data structures.
+* Learning how pathfinding algorithms work.
 
 
 <a name="en_rs"/>
