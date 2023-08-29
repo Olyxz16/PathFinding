@@ -5,6 +5,13 @@
 #include <windows.h>
 
 
+# define VIDE 0
+# define DEPART 1
+# define ARRIVEE 2
+# define VISITE 3
+# define MUR -1
+
+
 typedef struct vector2 {
     int x;
     int y;
@@ -31,11 +38,11 @@ void display_tab(int** tab, int size) {
     for(int i = 0 ; i < size ; i++) {
         for(int j = 0 ; j < size ; j++) {
             switch(tab[j][i]) {
-                case 0: printf("%c ",176); break;
-                case 1: printf("D "); break;
-                case 2: printf("A "); break;
-                case 3: printf("o "); break;
-                case -1: printf("%c ", 178); break;
+                case VIDE: printf("%c ",176); break;
+                case DEPART: printf("D "); break;
+                case ARRIVEE: printf("A "); break;
+                case VISITE: printf("o "); break;
+                case MUR: printf("%c ", 178); break;
             }
         }
         printf("\n");
@@ -44,9 +51,9 @@ void display_tab(int** tab, int size) {
 
 void slow_display(vec2l path, int** board, vec2 start, vec2 end, int size, int delta_t) {
     while(path!=NULL) {
-        board[path->val->x][path->val->y]=3;
-        board[start->x][start->y]=1;
-        board[end->x][end->y]=2;
+        board[path->val->x][path->val->y]=VISITE;
+        board[start->x][start->y]=DEPART;
+        board[end->x][end->y]=ARRIVEE;
         path = path->next;
         Sleep(delta_t);
         system("cls");
@@ -184,14 +191,15 @@ void main() {
     int** board = init_tab(size);
     for(int i = 0 ; i < size ; i++)
         for(int j = 0 ; j < size ; j++)
-            board[i][j] = 0;
+            board[i][j] = VIDE;
     for(int i = 0 ; i < 9 ; i++) {
-        board[i][4]=-1;
-        board[i+1][7]=-1;
+        board[i][4]=MUR;
+        board[i+1][7]=MUR;
     }
 
     vec2 start_pos = vec2i(0,0);
     vec2 target = vec2i(9,9);
+
     vec2l path = compute(board, start_pos, NULL, target, NULL, size);
 
     slow_display(path, board, start_pos, target, size, 200);
